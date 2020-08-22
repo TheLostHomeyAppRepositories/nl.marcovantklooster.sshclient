@@ -1,10 +1,11 @@
 {
     "id": "nl.marcovantklooster.sshclient",
+	"sdk": 2,
     "name": {
         "en": "SSH Client",
         "nl": "SSH Client"
     },
-    "version": "0.2.0",
+    "version": "0.3.0",
     "compatibility": ">=1.5.0",
     "author": {
 		"name": "Kerk en IT",
@@ -103,15 +104,33 @@
 						},
                         "value": ""
                     },
-                    {
-                        "id": "password",
-                        "type": "password",
-                        "label": {
-                            "en": "Password",
+					{
+						"id": "password",
+						"type": "password",
+						"label": {
+							"en": "Password",
 							"nl": "Wachtwoord"
 						},
-                        "value": ""
-                    }
+						"value": ""
+					},
+					{
+						"id": "privateKey",
+						"type": "textarea",
+						"label": {
+							"en": "privateKey",
+							"nl": "private sleutel"
+						},
+						"value": ""
+					},
+					{
+						"id": "passphrase",
+						"type": "password",
+						"label": {
+							"en": "Passphrase",
+							"nl": "Wachtwoordzin"
+						},
+						"value": ""
+					}
                 ]
             }
          ]

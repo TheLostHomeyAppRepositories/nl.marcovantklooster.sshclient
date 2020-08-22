@@ -22,6 +22,8 @@ function saveSettings () {
 	var inputHostname = document.getElementById( 'hostname' ).value.trim();
 	var inputUsername = document.getElementById( 'username' ).value.trim();
 	var inputPassword = document.getElementById( 'password' ).value.trim();
+	var inputPrivateKey = document.getElementById( 'privateKey' ).value.trim();
+	var inputPassprase = document.getElementById( 'passphrase' ).value.trim();
 	var inputPort = document.getElementById( 'port' ).value.trim();
 
 	var device = {
@@ -34,6 +36,8 @@ function saveSettings () {
 			username: inputUsername,
 			password: inputPassword,
 			serverName: inputServerName,
+			privateKey: inputPrivateKey,
+			passphrase: inputPassphrase,
 			port: parseInt(inputPort, 10)
 		}
 	};
@@ -43,7 +47,7 @@ function saveSettings () {
 		Homey.alert(__('pair.start.required.hostname'), 'error');
 	} else if( inputUsername.length === 0) {
 		Homey.alert(__('pair.start.required.username'), 'error');
-	} else if( inputPassword.length === 0) {
+	} else if( inputPassword.length === 0 && inputPrivateKey.length === 0) {
 		Homey.alert(__('pair.start.required.password'), 'error');
 	} else if( inputPort.length === 0 || isNaN(inputPort)) {
 		Homey.alert(__('pair.start.required.port'), 'error');
@@ -102,6 +106,15 @@ function saveSettings () {
 			<tr>
 				<td style="width:150px;" data-i18n="pair.start.password"></td>
 				<td><input id="password" type="password" value="" /></td>
+			</tr>
+			<tr>
+				<td style="width:150px;" data-i18n="pair.start.privateKey"></td>
+				<td>
+					<textarea id="privateKey" name="privateKey" rows="8" cols="10"></textarea></td>
+			</tr>
+			<tr>
+				<td style="width:150px;" data-i18n="pair.start.passphrase"></td>
+				<td><input id="passphrase" type="password" value="" /></td>
 			</tr>
 		</table>
 
