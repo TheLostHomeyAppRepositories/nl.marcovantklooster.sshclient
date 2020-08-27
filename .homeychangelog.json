@@ -1,0 +1,8 @@
+{
+  "0.3.0": {
+    "en": "Complete rewrite of code, added keypair authentication and flow triggers for received responses and errors"
+  },
+  "0.3.1": {
+    "en": "* Complete code rewrite to make use of SDK v2 instead of SDK v1."
+  }
+}
