@@ -1,19 +1,19 @@
 <script>
-Homey.setTitle( __('pair.start.title') );
-Homey.on('error', function( errortype, callback ){
-	if (errortype == 'error') {
-		Homey.alert(__('pair.start.error'), 'error');
-		Homey.done();
-	}
-	if (errortype == 'nosettings') {
-		Homey.alert(__('pair.start.nosettings'), 'error');
-		Homey.done();
-	}
-});
+	Homey.setTitle( __('pair.start.title') );
+	Homey.on('error', function( errortype, callback ){
+		if (errortype == 'error') {
+			Homey.alert(__('pair.start.error'), 'error');
+			Homey.done();
+		}
+		if (errortype == 'nosettings') {
+			Homey.alert(__('pair.start.nosettings'), 'error');
+			Homey.done();
+		}
+	});
 
-Homey.on('continue', function( success, callback ){
-	Homey.showView('list_devices');
-});
+	Homey.on('continue', function( success, callback ){
+		Homey.showView('list_devices');
+	});
 
 function saveSettings () {
 
@@ -23,7 +23,7 @@ function saveSettings () {
 	var inputUsername = document.getElementById( 'username' ).value.trim();
 	var inputPassword = document.getElementById( 'password' ).value.trim();
 	var inputPrivateKey = document.getElementById( 'privateKey' ).value.trim();
-	var inputPassprase = document.getElementById( 'passphrase' ).value.trim();
+	var inputPassphrase = document.getElementById( 'passphrase' ).value.trim();
 	var inputPort = document.getElementById( 'port' ).value.trim();
 
 	var device = {
@@ -73,18 +73,17 @@ function saveSettings () {
 
 </script>
 
-    <p data-i18n="pair.start.intro"></p>
-		<style>
-			.pairSettings {
-				font-size:16px;
-				border:none;
-			}
-
-			input {
-				font-size:16px;
-				border: 1px solid #ccc;
-			}
-		</style>
+<p data-i18n="pair.start.intro"></p>
+<style>
+	.pairSettings {
+		font-size:16px;
+		border:none;
+	}
+	input {
+		font-size:16px;
+		border: 1px solid #ccc;
+	}
+</style>
 
 		<table class="pairSettings">
 			<tr>
@@ -118,10 +117,10 @@ function saveSettings () {
 			</tr>
 		</table>
 
-		<p>
-		&nbsp;
-	  </p>
+<p>
+	&nbsp;
+</p>
 
 <fieldset>
-    <button class="button" data-i18n="pair.start.saveSettings" onclick="saveSettings()"></button>
+	<button class="button" data-i18n="pair.start.saveSettings" onclick="saveSettings()"></button>
 </fieldset>

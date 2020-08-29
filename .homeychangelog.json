@@ -1,0 +1,10 @@
+{
+  "0.1.4": {
+    "en": "Fixed issue to prevent crash of app. Right now the device is set to offline mode.",
+    "nl": "Fixed issue to prevent crash of app. Right now the device is set to offline mode."
+  },
+  "0.3.3": {
+    "en": "* Complete code rewrite to make use of SDK v2 instead of SDK v1.\n* Added support for keypair authentication with passphrases.\n* Added flow trigger for receiving errors.\n* Added flow trigger for receiving a response.",
+    "nl": "App compleet herschreven voor SDK versie 2\n Ondersteuning voor sleutelpaar met en zonder wachtwoordzin toegevoegd\n flowtriggers toegevoegd voor het ontvangen van foutmeldingen en antwoorden."
+  }
+}
