@@ -140,6 +140,7 @@
     "triggers": [
       {
         "id": "receiveResponse",
+        "deprecated": true,
         "title": {
           "en": "SSH response received",
           "nl": "SSH antwoord ontvangen"
@@ -224,7 +225,100 @@
         ]
       },
       {
+        "id": "receiveResponseDevice",
+        "title": {
+          "en": "SSH response received",
+          "nl": "SSH antwoord ontvangen"
+        },
+        "hint": {
+          "en": "After sending an SSH command, it is likely to receive a response. This trigger catches that response and contains tokens with that response. You could for example pass it through as a notification, or send it to the simple log app to store it",
+          "nl": "Na het versturen van een SSH commando is het waarschijnlijk dat je een antwoord krijgt. Deze trigger vangt dat antwoord af. Je kunt dat antwoord hiermee doorsturen als een notificatie of bijvoorbeeld naar de simple log app om dit antwoord op te slaan."
+        },
+        "tokens": [
+          {
+            "name": "command",
+            "type": "string",
+            "title": {
+              "en": "SSH command for which the response is received",
+              "nl": "SSH commando waar het antwoord voor ontvangen is"
+            },
+            "example": {
+              "en": "echo hello world",
+              "nl": "echo hallo wereld"
+            }
+          },
+          {
+            "name": "stdout",
+            "type": "string",
+            "title": {
+              "en": "Received response",
+              "nl": "Ontvangen antwoord"
+            },
+            "example": {
+              "en": "hello world",
+              "nl": "hallo wereld"
+            }
+          },
+          {
+            "name": "stderr",
+            "type": "string",
+            "title": {
+              "en": "Received error",
+              "nl": "Ontvangen foutmelding"
+            },
+            "example": {
+              "en": "could not echo, permission denied",
+              "nl": "onvoldoende rechten, fatale fout"
+            }
+          },
+          {
+            "name": "code",
+            "type": "number",
+            "title": {
+              "en": "Response code",
+              "nl": "Antwoord code"
+            },
+            "example": {
+              "en": "1",
+              "nl": "1"
+            }
+          },
+          {
+            "name": "signal",
+            "type": "string",
+            "title": {
+              "en": "Response signal",
+              "nl": "Antwoord signaal"
+            },
+            "example": {
+              "en": "",
+              "nl": ""
+            }
+          },
+          {
+            "name": "deviceName",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "nl": "Apparaat naam"
+            },
+            "example": {
+              "en": "The device the response was received for",
+              "nl": "Het apparaat waar het antwoord voor ontvangen is"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=ssh"
+          }
+        ]
+      },
+      {
         "id": "receiveError",
+        "deprecated": true,
         "title": {
           "en": "SSH error received",
           "nl": "SSH fout ontvangen"
@@ -283,11 +377,80 @@
             }
           }
         ]
+      },
+      {
+        "id": "receiveErrorDevice",
+        "title": {
+          "en": "SSH error received",
+          "nl": "SSH fout ontvangen"
+        },
+        "hint": {
+          "en": "When a connection can not be made for some reason, the error can be cought and debugged using this flow",
+          "nl": "Wanneer een verbinding niet gemaakt kan worden, de gebruikersnaam/wachtwoord onjuist zijn of er andere vergelijkbare fouten optreden worden deze hier afgevangen. Deze triggers kunnen daarom erg handig zijn bij het ontdekken waarom een ssh opdracht niet het gewenste resultaat oplevert"
+        },
+        "tokens": [
+          {
+            "name": "type",
+            "type": "string",
+            "title": {
+              "en": "Error type",
+              "nl": "Fout soort"
+            },
+            "example": {
+              "en": "One of: 'connection', 'command', 'generic'",
+              "nl": "Een van: 'connection', 'command', 'generic'"
+            }
+          },
+          {
+            "name": "error",
+            "type": "string",
+            "title": {
+              "en": "Complete error message",
+              "nl": "Complete foutmelding"
+            },
+            "example": {
+              "en": "The complete stringified error object",
+              "nl": "Het gehele fouten object als tekenreeks"
+            }
+          },
+          {
+            "name": "command",
+            "type": "string",
+            "title": {
+              "en": "SSH command for which the response is received",
+              "nl": "SSH commando waar het antwoord voor ontvangen is"
+            },
+            "example": {
+              "en": "echo hello world",
+              "nl": "echo hallo wereld"
+            }
+          },
+          {
+            "name": "deviceName",
+            "type": "string",
+            "title": {
+              "en": "Device name",
+              "nl": "Apparaat naam"
+            },
+            "example": {
+              "en": "The device the error was received for",
+              "nl": "Het apparaat waar de fout voor ontvangen is"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=ssh"
+          }
+        ]
       }
     ],
     "actions": [
       {
         "id": "command",
+        "deprecated": true,
         "title": {
           "en": "SSH command",
           "nl": "SSH commando"
@@ -300,6 +463,28 @@
               "en": "Select SSH client",
               "nl": "Selecteer SSH client"
             }
+          },
+          {
+            "name": "command",
+            "type": "text",
+            "placeholder": {
+              "en": "Command to execute",
+              "nl": "Uit te voeren commando"
+            }
+          }
+        ]
+      },
+      {
+        "id": "commandDevice",
+        "title": {
+          "en": "SSH command",
+          "nl": "SSH commando"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=ssh"
           },
           {
             "name": "command",
