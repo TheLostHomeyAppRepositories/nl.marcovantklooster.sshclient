@@ -21,13 +21,15 @@ module.exports = class sshDevice extends Device {
       })
       .register();
 
+    const device = this;
+
     const receiveErrorTrigger = new Homey.FlowCardTrigger('receiveError');
     receiveErrorTrigger
       .registerRunListener(() => {
         return Promise.resolve();
       })
       .register();
-    const receiveErrorDeviceTrigger = new Homey.FlowCardTrigger('receiveErrorDevice');
+    const receiveErrorDeviceTrigger = new Homey.FlowCardTriggerDevice('receiveErrorDevice');
     receiveErrorDeviceTrigger
       .registerRunListener(() => {
         return Promise.resolve();
@@ -38,7 +40,7 @@ module.exports = class sshDevice extends Device {
     const sshDeviceAction = new Homey.FlowCardAction('commandDevice');
 
     this.deviceAction = async args => {
-      const settings = this.getSettings();
+      const settings = args.device.getSettings();
       this.log(`SSH Client - sending ${args.command}\n to ${settings.hostname}`);
       let completed = false;
 
@@ -78,14 +80,14 @@ module.exports = class sshDevice extends Device {
             return Promise.resolve();
           }
           const tokens = {
-            type: 'generic', error: err ? err.toString() : '', command: args.command, deviceName: this.getName(),
+            type: 'generic', error: err ? err.toString() : '', command: args.command, deviceName: args.device.getName(),
           };
           receiveErrorTrigger.trigger(tokens).catch(receiveErrorTriggerError => {
             this.log('could not start flow', receiveErrorTriggerError);
           }).finally(() => {
             this.log('received error event', tokens);
           });
-          return receiveErrorDeviceTrigger.trigger(tokens).catch(receiveErrorTriggerError => {
+          return receiveErrorDeviceTrigger.trigger(args.device, tokens).catch(receiveErrorTriggerError => {
             this.log('could not start flow', receiveErrorTriggerError);
           }).finally(() => {
             this.log('received error event', tokens);
@@ -110,7 +112,7 @@ module.exports = class sshDevice extends Device {
             this.log('received', tokens, data);
             client.dispose();
           });
-          return receiveResponseDeviceTrigger.trigger(tokens).catch(
+          return receiveResponseDeviceTrigger.trigger(args.device, tokens).catch(
             err => this.log('could not fire the response trigger', err),
           ).finally(() => {
             this.log('received', tokens, data);

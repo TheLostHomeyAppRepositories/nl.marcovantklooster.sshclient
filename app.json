@@ -5,7 +5,7 @@
     "en": "SSH Client",
     "nl": "SSH Client"
   },
-  "version": "0.3.3",
+  "version": "0.3.4",
   "compatibility": ">=1.5.0",
   "author": {
     "name": "Jonathan van Bochove"
