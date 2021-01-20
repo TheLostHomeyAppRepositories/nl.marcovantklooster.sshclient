@@ -21,8 +21,6 @@ module.exports = class sshDevice extends Device {
       })
       .register();
 
-    const device = this;
-
     const receiveErrorTrigger = new Homey.FlowCardTrigger('receiveError');
     receiveErrorTrigger
       .registerRunListener(() => {
