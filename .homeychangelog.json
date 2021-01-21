@@ -10,5 +10,9 @@
   "0.3.4": {
     "en": "Fixed issue for managing multiple devices.",
     "nl": "Fout waarbij in het geval van meerdere servers telkens de laatste gebruikt werd opgelost"
+  },
+  "0.3.5": {
+    "en": "Reset device status after updating settings.",
+    "nl": "Apparaat status reset na aanpassen status"
   }
 }

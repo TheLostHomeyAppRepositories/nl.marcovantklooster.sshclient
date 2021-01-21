@@ -6,8 +6,9 @@ const SSH2 = require('node-ssh').NodeSSH;
 
 module.exports = class sshDevice extends Device {
 
+  // noinspection JSUnusedGlobalSymbols
   onInit() {
-    // register listener for flowcardtriggers
+    // register listener for flow card triggers
     const receiveResponseTrigger = new Homey.FlowCardTrigger('receiveResponse');
     receiveResponseTrigger
       .registerRunListener(() => {
@@ -37,11 +38,17 @@ module.exports = class sshDevice extends Device {
     const sshAction = new Homey.FlowCardAction('command');
     const sshDeviceAction = new Homey.FlowCardAction('commandDevice');
 
+    // noinspection JSUnusedGlobalSymbols
     this.deviceAction = async args => {
       const settings = args.device.getSettings();
       this.log(`SSH Client - sending ${args.command}\n to ${settings.hostname}`);
+      this.log(args);
+      this.log(args.device);
+      this.log(settings);
+
       let completed = false;
 
+      // noinspection JSUnusedGlobalSymbols
       const sshConfig = {
         host: settings.hostname,
         username: settings.username,
@@ -69,6 +76,7 @@ module.exports = class sshDevice extends Device {
 
       this.log('starting the connection');
       return client.connect(sshConfig).then(() => {
+        // noinspection JSUnresolvedFunction
         client.connection.on('error', err => {
           // Here we catch all errors that are not related to creating a connection or executing
           // the command. In testing that was only about improperly closing a connection.
@@ -78,18 +86,19 @@ module.exports = class sshDevice extends Device {
             return Promise.resolve();
           }
           const tokens = {
-            type: 'generic', error: err ? err.toString() : '', command: args.command, deviceName: args.device.getName(),
+            type: 'generic', error: err ? err.toString() : '', command: args.command, deviceName: settings.serverName,
           };
-          receiveErrorTrigger.trigger(tokens).catch(receiveErrorTriggerError => {
+          receiveErrorTrigger.trigger(tokens, null).catch(receiveErrorTriggerError => {
             this.log('could not start flow', receiveErrorTriggerError);
           }).finally(() => {
             this.log('received error event', tokens);
           });
-          return receiveErrorDeviceTrigger.trigger(args.device, tokens).catch(receiveErrorTriggerError => {
-            this.log('could not start flow', receiveErrorTriggerError);
-          }).finally(() => {
-            this.log('received error event', tokens);
-          });
+          return receiveErrorDeviceTrigger.trigger(args.device, tokens, null)
+            .catch(receiveErrorTriggerError => {
+              this.log('could not start flow', receiveErrorTriggerError);
+            }).finally(() => {
+              this.log('received error event', tokens);
+            });
         });
         this.log('connected');
         client.execCommand(args.command).then(data => {
@@ -104,13 +113,13 @@ module.exports = class sshDevice extends Device {
             signal: data.signal ? data.signal : '',
             deviceName: this.getName(),
           };
-          receiveResponseTrigger.trigger(tokens).catch(
+          receiveResponseTrigger.trigger(tokens, null).catch(
             err => this.log('could not fire the response trigger', err),
           ).finally(() => {
             this.log('received', tokens, data);
             client.dispose();
           });
-          return receiveResponseDeviceTrigger.trigger(args.device, tokens).catch(
+          return receiveResponseDeviceTrigger.trigger(args.device, tokens, null).catch(
             err => this.log('could not fire the response trigger', err),
           ).finally(() => {
             this.log('received', tokens, data);
@@ -119,13 +128,16 @@ module.exports = class sshDevice extends Device {
         }).catch(err => {
           // we can not possibly have completed the command here, as it ended up in the catch
           const tokens = {
-            type: 'command', error: err ? err.toString() : '', command: args.command, deviceName: this.getName(),
+            type: 'command', error: err ? err.toString() : '', command: args.command, deviceName: settings.serverName,
           };
-          return receiveErrorTrigger.trigger(tokens).catch(receiveErrorTriggererror => {
-            this.log('could not start flow', receiveErrorTriggererror);
+          receiveErrorDeviceTrigger.trigger(args.device, tokens, null)
+            .catch(receiveErrorTriggerError => {
+              this.log('could not start flow', receiveErrorTriggerError);
+            });
+          return receiveErrorTrigger.trigger(tokens, null).catch(receiveErrorTriggerError => {
+            this.log('could not start flow', receiveErrorTriggerError);
           }).finally(() => {
             this.log('error received on sending command', tokens, err);
-            this.setUnavailable(`Error: ${JSON.stringify(err)}`);
             return Promise.resolve();
           });
         });
@@ -133,9 +145,13 @@ module.exports = class sshDevice extends Device {
         // We failed to connect, so the command could not have completed and we need to fire the
         // receive error trigger.
         const tokens = {
-          type: 'connection', error: err ? err.toString() : '', command: args.command, deviceName: this.getName(),
+          type: 'connection', error: err ? err.toString() : '', command: args.command, deviceName: settings.serverName,
         };
-        receiveErrorTrigger.trigger(tokens).catch(receiveErrorTriggerError => {
+        receiveErrorDeviceTrigger.trigger(args.device, tokens, null)
+          .catch(receiveErrorTriggerError => {
+            this.log('could not start flow', receiveErrorTriggerError);
+          });
+        receiveErrorTrigger.trigger(tokens, null).catch(receiveErrorTriggerError => {
           this.log('could not fire error trigger', receiveErrorTriggerError);
         }).finally(() => {
           this.setUnavailable(`Error: ${JSON.stringify(err)}`);
@@ -151,6 +167,10 @@ module.exports = class sshDevice extends Device {
     sshDeviceAction
       .register()
       .registerRunListener(async args => this.deviceAction(args));
+  }
+
+  async onSettings(oldSettingsObj, newSettingsObj, changedKeysArr) {
+    return this.setAvailable();
   }
 
 };
