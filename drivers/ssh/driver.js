@@ -12,11 +12,12 @@ let tempPort = 22;
 
 module.exports = class sshDriver extends Homey.Driver {
 
-  onPair(socket) {
+  onPair(session) {
     // socket is a direct channel to the front-end
     // this method is run when Homey.emit("list_devices") is run on the front-end
     // which happens when you use the template `list_devices`
-    socket.on('list_devices', (data, callback) => {
+    //socket.on('list_devices', (data, callback) => {
+    session.setHandler('list_devices', async (data) => {
       this.log(`SSH Client - list_devices tempHostName is: ${tempHostName}`);
       const devices = [{
         data: {
@@ -30,10 +31,12 @@ module.exports = class sshDriver extends Homey.Driver {
         },
         name: tempServerName,
       }];
-      callback(null, devices);
+      // callback(null, devices);
+      return  devices;
     });
     // this is called when the user presses save settings button in start.html
-    socket.on('get_devices', function(data, callback) {
+    // socket.on('get_devices', function(data, callback) {
+    session.setHandler('get_devices', async function(data) {
       // Set passed pair settings in variables
       tempHostName = data.hostname;
       tempUsername = data.username;
@@ -62,7 +65,8 @@ module.exports = class sshDriver extends Homey.Driver {
         tempServerName = data.serverName;
       }
       this.log('SSH Client - got get_devices from front-end, tempHostName =', tempHostName);
-      callback(null, devices);
+      // callback(null, devices);
+      return devices;
     });
   }
 

@@ -9,34 +9,40 @@ module.exports = class sshDevice extends Device {
   // noinspection JSUnusedGlobalSymbols
   onInit() {
     // register listener for flow card triggers
-    const receiveResponseTrigger = new Homey.FlowCardTrigger('receiveResponse');
+    // const receiveResponseTrigger = new Homey.FlowCardTrigger('receiveResponse');
+    this.receiveResponseTrigger = this.homey.flow.getDeviceTriggerCard('receiveResponse');
+    /**
     receiveResponseTrigger
       .registerRunListener(() => {
         return Promise.resolve();
       })
-      .register();
-    const receiveResponseDeviceTrigger = new Homey.FlowCardTriggerDevice('receiveResponseDevice');
+      .register(); 
+     */ 
+    // const receiveResponseDeviceTrigger = new Homey.FlowCardTriggerDevice('receiveResponseDevice');
+    this.receiveResponseDeviceTrigger = this.homey.flow.getDeviceTriggerCard('receiveResponseDevice');
+    /**
+
     receiveResponseDeviceTrigger
-      .registerRunListener(() => {
-        return Promise.resolve();
-      })
-      .register();
+    .registerRunListener(() => {
+      return Promise.resolve();
+    })
+    .register();
+    */
 
-    const receiveErrorTrigger = new Homey.FlowCardTrigger('receiveError');
-    receiveErrorTrigger
-      .registerRunListener(() => {
-        return Promise.resolve();
-      })
-      .register();
-    const receiveErrorDeviceTrigger = new Homey.FlowCardTriggerDevice('receiveErrorDevice');
-    receiveErrorDeviceTrigger
-      .registerRunListener(() => {
-        return Promise.resolve();
-      })
-      .register();
+    this.receiveErrorTrigger = this.homey.flow.getDeviceTriggerCard('receiveError');
+    this.receiveErrorDeviceTrigger = this.homey.flow.getDeviceTriggerCard('receiveErrorDevice');
 
-    const sshAction = new Homey.FlowCardAction('command');
-    const sshDeviceAction = new Homey.FlowCardAction('commandDevice');
+    // const sshAction = new Homey.FlowCardAction('command');
+    this.sshAction = this.homey.flow.getActionCard('command')
+        // sshAction
+      // .register()
+      .registerRunListener(async args => this.deviceAction(args));
+
+    // const sshDeviceAction = new Homey.FlowCardAction('commandDevice');
+    this.sshDeviceAction = this.homey.flow.getActionCard('commandDevice')
+    //sshDeviceAction
+      // .register()
+      .registerRunListener(async args => this.deviceAction(args));
 
     // noinspection JSUnusedGlobalSymbols
     this.deviceAction = async args => {
@@ -88,12 +94,12 @@ module.exports = class sshDevice extends Device {
           const tokens = {
             type: 'generic', error: err ? err.toString() : '', command: args.command, deviceName: settings.serverName,
           };
-          receiveErrorTrigger.trigger(tokens, null).catch(receiveErrorTriggerError => {
+          this.receiveErrorTrigger.trigger(tokens, null).catch(receiveErrorTriggerError => {
             this.log('could not start flow', receiveErrorTriggerError);
           }).finally(() => {
             this.log('received error event', tokens);
           });
-          return receiveErrorDeviceTrigger.trigger(args.device, tokens, null)
+          return this.receiveErrorDeviceTrigger.trigger(args.device, tokens, null)
             .catch(receiveErrorTriggerError => {
               this.log('could not start flow', receiveErrorTriggerError);
             }).finally(() => {
@@ -113,14 +119,16 @@ module.exports = class sshDevice extends Device {
             signal: data.signal ? data.signal : '',
             deviceName: this.getName(),
           };
-          receiveResponseTrigger.trigger(tokens, null).catch(
-            err => this.log('could not fire the response trigger', err),
+          /**
+          this.receiveResponseTrigger.trigger(tokens, null).catch(
+            err => this.log('1g could not fire the response trigger', err),
           ).finally(() => {
             this.log('received', tokens, data);
             client.dispose();
           });
-          return receiveResponseDeviceTrigger.trigger(args.device, tokens, null).catch(
-            err => this.log('could not fire the response trigger', err),
+          */
+          return this.receiveResponseDeviceTrigger.trigger(args.device, tokens, null).catch(
+            err => this.log('2d could not fire the response trigger', err),
           ).finally(() => {
             this.log('received', tokens, data);
             client.dispose();
@@ -130,7 +138,7 @@ module.exports = class sshDevice extends Device {
           const tokens = {
             type: 'command', error: err ? err.toString() : '', command: args.command, deviceName: settings.serverName,
           };
-          receiveErrorDeviceTrigger.trigger(args.device, tokens, null)
+          this.receiveErrorDeviceTrigger.trigger(args.device, tokens, null)
             .catch(receiveErrorTriggerError => {
               this.log('could not start flow', receiveErrorTriggerError);
             });
@@ -147,7 +155,7 @@ module.exports = class sshDevice extends Device {
         const tokens = {
           type: 'connection', error: err ? err.toString() : '', command: args.command, deviceName: settings.serverName,
         };
-        receiveErrorDeviceTrigger.trigger(args.device, tokens, null)
+        this.receiveErrorDeviceTrigger.trigger(args.device, tokens, null)
           .catch(receiveErrorTriggerError => {
             this.log('could not start flow', receiveErrorTriggerError);
           });
@@ -160,14 +168,10 @@ module.exports = class sshDevice extends Device {
       });
     };
 
-    sshAction
-      .register()
-      .registerRunListener(async args => this.deviceAction(args));
 
-    sshDeviceAction
-      .register()
-      .registerRunListener(async args => this.deviceAction(args));
   }
+
+
 
   async onSettings(oldSettingsObj, newSettingsObj, changedKeysArr) {
     return this.setAvailable();

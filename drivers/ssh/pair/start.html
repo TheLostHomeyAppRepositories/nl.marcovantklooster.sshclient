@@ -43,7 +43,8 @@ function saveSettings () {
 	};
 
 	// Give error, required values
-	if (inputHostname.length === 0 || inputHostname === 'localhost' || inputHostname === '127.0.0.1') {
+	// if (inputHostname.length === 0 || inputHostname === 'localhost' || inputHostname === '127.0.0.1') {
+	if (inputHostname.length === 0 ) {
 		Homey.alert(__('pair.start.required.hostname'), 'error');
 	} else if( inputUsername.length === 0) {
 		Homey.alert(__('pair.start.required.username'), 'error');
@@ -59,8 +60,9 @@ function saveSettings () {
 			if(err !== null) {
 				$('.ssh-err-msg').text(err);
 			} else {
-				//Successfully connected
-				Homey.addDevice(device, function( err, result ){
+				// Successfully connected
+				// Homey.addDevice(device, function( err, result ){
+				Homey.createDevice(device, function( err, result ){
 					if( err ) return Homey.error(err);
 					console.log( result);
 				});
