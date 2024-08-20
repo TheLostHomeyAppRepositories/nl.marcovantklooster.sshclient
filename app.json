@@ -5,10 +5,10 @@
     "en": "SSH Client",
     "nl": "SSH Client"
   },
-  "version": "0.3.5",
+  "version": "0.4.0",
   "compatibility": ">=5.0.0",
   "author": {
-    "name": "Jonathan van Bochove"
+    "name": "Geurt Dijker"
   },
   "contributors": {
     "developers": [
@@ -17,7 +17,6 @@
       },
       {
         "name": "Marco van 't Klooster",
-        "website": "https://www.kerkenit.nl"
       }
     ]
   },
