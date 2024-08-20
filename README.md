@@ -17,9 +17,11 @@ In the flow manager you can select the server, and send the command.
 ## Remarks
 
 * You can debug things using a flow with the receivedResponse and receivedError events. Tokens for what device, command etc are available within the flows.
-* You can't create an connection to the Homey, because SSH access to the Homey is secured by Athom.
 
 ## Changelog
+
+### 0.4.1
+* Quick codefix  to make use of SDK v3 instead of SDK v2.
 
 ### 0.3.0
 * Complete code rewrite to make use of SDK v2 instead of SDK v1.

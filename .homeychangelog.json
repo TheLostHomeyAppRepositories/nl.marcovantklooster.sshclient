@@ -14,5 +14,8 @@
   "0.3.5": {
     "en": "Reset device status after updating settings.",
     "nl": "Apparaat status reset na aanpassen status"
+  },
+  "0.4.0": {
+    "en": "Developer Transfered, update to SDK3"
   }
 }

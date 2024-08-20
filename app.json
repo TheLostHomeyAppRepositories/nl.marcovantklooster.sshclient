@@ -16,13 +16,14 @@
         "name": "Jonathan van Bochove"
       },
       {
-        "name": "Marco van 't Klooster",
+        "name": "Marco van 't Klooster"
       }
     ]
   },
   "homeyCommunityTopicId": 34044,
+  "brandColor": "#38DF20",
   "bugs": {
-    "url": "https://github.com/bochove/nl.marcovantklooster.sshclient/issues"
+    "url": "https://github.com/Dijker/nl.marcovantklooster.sshclient/issues"
   },
   "images": {
     "large": "./assets/images/large.jpg",
