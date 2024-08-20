@@ -5,7 +5,7 @@
     "en": "SSH Client",
     "nl": "SSH Client"
   },
-  "version": "0.4.0",
+  "version": "0.4.1",
   "compatibility": ">=5.0.0",
   "author": {
     "name": "Geurt Dijker"
